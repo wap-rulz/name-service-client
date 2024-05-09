@@ -6,14 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class EtcdClient {
-    private String etcdAddress;
+    private final String etcdAddress;
 
-    public EtcdClient(String etcdAddress) throws IOException {
+    public EtcdClient(String etcdAddress) {
         this.etcdAddress = etcdAddress;
     }
 
@@ -27,12 +28,11 @@ public class EtcdClient {
     public String get(String key) throws IOException {
         System.out.println("Getting value for Key=" + key);
         String getUrl = etcdAddress + "/v3/kv/range";
-        String serverResponse = callEtcd(getUrl, buildGetRequestPayload(key));
-        return serverResponse;
+        return callEtcd(getUrl, buildGetRequestPayload(key));
     }
 
     private String callEtcd(String url, String payload) throws IOException {
-        URL etcdUrl = new URL(url);
+        URL etcdUrl = URI.create(url).toURL();
         HttpURLConnection connection = (HttpURLConnection) etcdUrl.openConnection();
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);

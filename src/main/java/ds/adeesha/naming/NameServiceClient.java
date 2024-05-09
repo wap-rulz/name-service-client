@@ -8,9 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class NameServiceClient {
-    private EtcdClient etcdClient;
+    private final EtcdClient etcdClient;
 
-    public NameServiceClient(String nameServiceAddress) throws IOException {
+    public NameServiceClient(String nameServiceAddress) {
         etcdClient = new EtcdClient(nameServiceAddress);
     }
 
